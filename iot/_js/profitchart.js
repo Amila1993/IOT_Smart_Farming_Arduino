@@ -7,23 +7,23 @@ $(function() {
         var dateTime = new Array();
         var time = new Array();
         $.ajax({
-            url: "data.php?q=2",
+            url: "data.php?q=12",
             type: 'get',
             success: function(DatosRecuperados) {
                 $.each(DatosRecuperados, function(i, o) {
                     if (o.x) {
                         var jsonString = o.x;
-                        var dateTime = jsonString.split(" ");
-                        var time1 = dateTime[1].split(":");
-                        var date1 = dateTime[0].split("-");
-                        var timedate = date1.concat(time1);
-                        var fultime = timedate.join("");
+                        var dateTime = jsonString.split("-");
+                        var date2 = dateTime[1];
+                        var date1 = dateTime[0];
+                        var timedate = date1.concat(date2);
+                        // var fultime = timedate.join("");
 
                         console.log(dateTime[1]);
 
                         xTitles.push(o.x);
 
-                        DatosRecuperados[i].x = parseInt(fultime);
+                        DatosRecuperados[i].x = parseInt(timedate);
                         console.log(xTitles[xTitles.length - 1]);
 
                     }
@@ -38,7 +38,7 @@ $(function() {
 
                 $('#chart').highcharts({
                     chart: {
-                        type: 'spline',
+                        type: 'column',
                         animation: Highcharts.svg,
                         marginRight: 10,
                         events: {
@@ -48,16 +48,16 @@ $(function() {
                         }
                     },
                     title: {
-                        text: 'Temprature Chart'
+                        text: 'Profit Chart'
                     },
                     xAxis: {
-                        tickPixelInterval: 100,
+                        tickPixelInterval: 10,
                         categories: ['A']
 
                     },
                     yAxis: {
                         title: {
-                            text: 'Celsius'
+                            text: 'Dollers($)'
                         },
                         plotLines: [{
                             value: 0,
@@ -88,7 +88,7 @@ $(function() {
         });
     });
     setInterval(function() {
-        $.get("data.php?q=1", function(UltimosDatos) {
+        $.get("data.php?q=11", function(UltimosDatos) {
             var varlocalx = parseFloat(UltimosDatos[0].x);
             var varlocaly = parseFloat(UltimosDatos[0].y);
 
@@ -99,7 +99,7 @@ $(function() {
                 sety(varlocaly);
             }
         });
-    }, 100);
+    }, 1000);
 
     function getx() {
         return ultimox;
